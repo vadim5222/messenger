@@ -33,7 +33,7 @@ async def register(session: SessionDep, user: UserCreate):
     return new_user
 
 
-@auth_router.post('/login')
+@auth_router.post('/token')
 async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], session:SessionDep):
     user = await authenticate(session=session, username=form_data.username, password=form_data.password)
     if not user:
