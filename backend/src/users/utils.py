@@ -2,7 +2,7 @@ from sqlmodel import select
 from database import SessionDep
 from users.models import Users
 from typing import Annotated
-from fastapi import Depends
+from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from .exceptions import credential_exception
 from dotenv import load_dotenv
@@ -37,4 +37,12 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], sessio
     if not user:
         raise credential_exception
     return user
+
+async def get_active_current_user(current_user: Annotated[Users, Depends(get_current_user)]):
+    if not current_user.active:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail='Incative user'
+        )
+    return current_user
         

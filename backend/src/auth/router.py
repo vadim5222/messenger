@@ -38,6 +38,7 @@ async def register(session: SessionDep, user: UserCreate):
         username = user.username,
         surname = user.surname,
         age = user.age,
+        active=user.active,
         hashed_password = get_password_hash(user.password),
     )
     session.add(new_user)
