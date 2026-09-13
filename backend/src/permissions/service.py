@@ -1,5 +1,5 @@
 from database import SessionDep
-from users.models import Permission
+from users.models import Permission, Role
 from sqlmodel import select
 from .schemas import PermissionCreate
 from fastapi import HTTPException, status
@@ -18,7 +18,8 @@ async def create_permission(permission: PermissionCreate, session: SessionDep):
             detail='This permission already exist'
         )
     new_permission = Permission(
-        title = permission.title
+        title = permission.title,
+        role_id = permission.role_id
     )
     session.add(new_permission)
     await session.commit()

@@ -3,7 +3,6 @@ from typing import Optional, List
 
 
 
-
 class User(SQLModel):
     username: str
     surname: str
@@ -34,7 +33,7 @@ class Role(SQLModel, table=True):
 class Permission(SQLModel, table=True):
     id: int = Field(primary_key=True)
     title: str
-    role_id: int = Field(foreign_key='role.id')
+    role_id: int | None = Field(default=None, foreign_key='role.id')
     roles: Optional[Role] = Relationship(back_populates='permissions')
 
 
