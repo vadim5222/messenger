@@ -12,6 +12,7 @@ class RolePermissionLink(SQLModel, table=True):
 
 class Role(SQLModel, table=True):
     id: int = Field(primary_key=True)
+    title: str
     users: List["Users"] = Relationship(back_populates='role')
     permissions: List["Permission"] = Relationship(back_populates='roles', link_model=RolePermissionLink)
 
@@ -38,8 +39,8 @@ class UserPublic(User):
 
 class Users(User, table=True):
     id: int = Field(primary_key=True)
-    role: Role | None = Relationship(back_populates='users')
     role_id: int| None = Field(default=None, foreign_key='role.id')
+    role: Role | None = Relationship(back_populates='users')
     hashed_password: str
 
 

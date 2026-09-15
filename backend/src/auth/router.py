@@ -1,6 +1,6 @@
-from fastapi import APIRouter, HTTPException, status, Depends, Body
+from fastapi import APIRouter, HTTPException, status, Depends
 from database import SessionDep
-from users.models import UserCreate, Users, UserPublic
+from users.models import UserCreate, Users, UserPublic, Role
 from security import get_password_hash
 from users.utils import get_user
 from typing import Annotated
@@ -13,6 +13,7 @@ from tokens.service import create_access_token, create_refresh_token
 from tokens.schemas import TokenRead, TokenData, RefreshToken
 from .exceptions import unauthorized_exception
 import jwt
+from sqlmodel import select
 from jwt.exceptions import InvalidTokenError
 from dotenv import load_dotenv
 load_dotenv()
@@ -34,12 +35,21 @@ async def register(session: SessionDep, user: UserCreate):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail='Такой пользователь уже существует'
         )
+    role_select = select(Role).where(Role.title == 'User')
+    role_execute = await session.execute(role_select)
+    role = role_execute.scalar_one_or_none()
+    if not role:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail='Role is none'
+        )
     new_user = Users(
         username = user.username,
         surname = user.surname,
         age = user.age,
         active=user.active,
         hashed_password = get_password_hash(user.password),
+        role_id=role.id
     )
     session.add(new_user)
     await session.commit()
