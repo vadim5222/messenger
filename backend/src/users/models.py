@@ -1,20 +1,33 @@
-from sqlmodel import SQLModel, Field, Relationship, Table
-from typing import Optional, List
+from sqlmodel import SQLModel, Field, Relationship
+from typing import List
 
 
 
+# ========================Модели ролей и разрешений
+
+class RolePermissionLink(SQLModel, table=True):
+    role_id: int | None = Field(default=None, foreign_key='role.id', primary_key=True)
+    permission_id: int | None = Field(default=None, foreign_key='permission.id', primary_key=True)
+
+
+class Role(SQLModel, table=True):
+    id: int = Field(primary_key=True)
+    users: List["Users"] = Relationship(back_populates='role')
+    permissions: List["Permission"] = Relationship(back_populates='roles', link_model=RolePermissionLink)
+
+
+class Permission(SQLModel, table=True):
+    id: int = Field(primary_key=True)
+    roles: List["Role"] = Relationship(back_populates='permissions', link_model=RolePermissionLink)
+
+
+
+# ======================Модели пользователя
 class User(SQLModel):
     username: str
     surname: str
     age: int
     active: bool 
-
-
-class Users(User, table=True):
-    id: int = Field(primary_key=True)
-    hashed_password: str
-    role_id: int = Field(foreign_key='role.id')
-    roles:List["Role"] = Relationship(back_populates='users')
 
 class UserCreate(User):
     password: str
@@ -23,17 +36,17 @@ class UserPublic(User):
     id: int
 
 
-# ==============модели пользователя для прав доступа
-class Role(SQLModel, table=True):
+class Users(User, table=True):
     id: int = Field(primary_key=True)
-    title: str
-    permissions: List["Permission"] = Relationship(back_populates='roles')
-    users: List[Users] = Relationship(back_populates='roles')
+    role: Role | None = Relationship(back_populates='users')
+    role_id: int| None = Field(default=None, foreign_key='role.id')
+    hashed_password: str
 
-class Permission(SQLModel, table=True):
-    id: int = Field(primary_key=True)
-    title: str
-    role_id: int | None = Field(default=None, foreign_key='role.id')
-    roles: Optional[Role] = Relationship(back_populates='permissions')
+
+
+
+
+
+
 
 

@@ -6,6 +6,7 @@ load_dotenv()
 from typing import Annotated
 from fastapi import APIRouter
 from users.models import Users
+from sqlmodel import SQLModel
 
 database_router = APIRouter()
 
@@ -23,6 +24,6 @@ SessionDep = Annotated[AsyncSession, Depends(get_session)]
 @database_router.post('/setup-database')
 async def setup_database():
     async with engine.begin() as conn:
-        await conn.run_sync(Users.metadata.drop_all)
-        await conn.run_sync(Users.metadata.create_all)
+        await conn.run_sync(SQLModel.metadata.drop_all)
+        await conn.run_sync(SQLModel.metadata.create_all)
     return {'message':'Успех'}
