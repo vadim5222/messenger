@@ -16,3 +16,4 @@ class RefreshToken(SQLModel):
 
 class TokenData(SQLModel):
     username: str | None = None
+    role: str | None = None

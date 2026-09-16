@@ -19,6 +19,7 @@ class Role(SQLModel, table=True):
 
 class Permission(SQLModel, table=True):
     id: int = Field(primary_key=True)
+    title: str
     roles: List["Role"] = Relationship(back_populates='permissions', link_model=RolePermissionLink)
 
 

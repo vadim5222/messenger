@@ -4,4 +4,4 @@ class PermissionBase(SQLModel):
     title: str
 
 class PermissionCreate(PermissionBase):
-    role_id: int
+    title: str

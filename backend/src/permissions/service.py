@@ -18,8 +18,7 @@ async def create_permission(permission: PermissionCreate, session: SessionDep):
             detail='This permission already exist'
         )
     new_permission = Permission(
-        title = permission.title,
-        role_id = permission.role_id
+        title = permission.title
     )
     session.add(new_permission)
     await session.commit()
