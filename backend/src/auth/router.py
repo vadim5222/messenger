@@ -67,7 +67,8 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], sess
     access_token = create_access_token(
         data={
             'sub': user.username,
-            'role': user.role.title
+            'role': user.role.title,
+            'permissions': [p.title for p in user.role.permissions]
         },
         expire_delta=access_token_expire
     )

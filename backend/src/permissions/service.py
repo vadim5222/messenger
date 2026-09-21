@@ -1,13 +1,13 @@
 from database import SessionDep
-from users.models import Permission, Role
+from users.models import Permission
 from sqlmodel import select
 from .schemas import PermissionCreate
 from fastapi import HTTPException, status
 
-async def get_permission(title: str, session: SessionDep):
-    query = select(Permission).where(Permission.title == title)
+async def get_permission(titles: list[str], session: SessionDep):
+    query = select(Permission).where(Permission.title.in_(titles))
     result = await session.execute(query)
-    return result.scalar_one_or_none()
+    return result.scalars().all()
 
 
 async def create_permission(permission: PermissionCreate, session: SessionDep):

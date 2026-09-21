@@ -1,4 +1,5 @@
-from sqlmodel import SQLModel   
+from sqlmodel import SQLModel 
+from typing import List
 
 class Token(SQLModel):
     access_token: str
@@ -17,3 +18,4 @@ class RefreshToken(SQLModel):
 class TokenData(SQLModel):
     username: str | None = None
     role: str | None = None
+    permissions: List[str] | None = None
