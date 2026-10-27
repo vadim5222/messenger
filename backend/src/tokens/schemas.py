@@ -1,21 +1,21 @@
-from sqlmodel import SQLModel 
+from pydantic import BaseModel 
 from typing import List
 
-class Token(SQLModel):
+class Token(BaseModel):
     access_token: str
     refresh_token: str
     token_type: str
 
-class TokenRead(SQLModel):
+class TokenRead(BaseModel):
     access_token: str
     refresh_token: str
     token_type: str
 
-class RefreshToken(SQLModel):
+class RefreshToken(BaseModel):
     refresh_token: str
 
 
-class TokenData(SQLModel):
+class TokenData(BaseModel):
     username: str | None = None
     role: str | None = None
     permissions: List[str] | None = None

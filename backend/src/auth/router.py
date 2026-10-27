@@ -1,23 +1,35 @@
-from fastapi import APIRouter, HTTPException, status, Depends
-from database import SessionDep
-from users.models import UserCreate, Users, UserPublic, Role
-from security import get_password_hash
-from users.utils import get_user
+import jwt
+import os
 from typing import Annotated
+from datetime import timedelta
+from dotenv import load_dotenv
+
+
+from jwt.exceptions import InvalidTokenError
+
+
+from fastapi import APIRouter, HTTPException, status, Depends
 from fastapi.security import OAuth2PasswordRequestForm
+
+from database import SessionDep
+from security import get_password_hash
+
 from .exceptions import unauthorized_exception
+
+from users.schemas import UserCreate, UserPublic
+from users.models import User, Role
+from users.utils import get_user
 from users.exceptions import credential_exception
 from users.service import authenticate
-from datetime import timedelta
+
+
 from tokens.service import create_access_token, create_refresh_token
 from tokens.schemas import TokenRead, TokenData, RefreshToken
-from .exceptions import unauthorized_exception
-import jwt
+
+
 from sqlmodel import select
-from jwt.exceptions import InvalidTokenError
-from dotenv import load_dotenv
+
 load_dotenv()
-import os
 
 
 
@@ -43,11 +55,12 @@ async def register(session: SessionDep, user: UserCreate):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail='Role is none'
         )
-    new_user = Users(
-        username = user.username,
+    new_user = User(
+        name = user.name,
         surname = user.surname,
+        username = user.username,
         age = user.age,
-        active=user.active,
+        # active=user.active,
         hashed_password = get_password_hash(user.password),
         role_id=role.id
     )

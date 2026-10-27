@@ -1,11 +1,15 @@
 from fastapi import APIRouter, Depends
-from typing import Annotated
-from users.utils import get_active_current_user
-from users.models import Users, UserPublic
 
+
+from typing import Annotated
+
+
+from users.utils import get_active_current_user
+from users.schemas import UserPublic
+from users.models import User
 
 user_router = APIRouter()
 
 @user_router.get('/users/me', response_model=UserPublic)
-async def read_users_me(current_user: Annotated[Users, Depends(get_active_current_user)]):
+async def read_users_me(current_user: Annotated[User, Depends(get_active_current_user)]):
     return current_user

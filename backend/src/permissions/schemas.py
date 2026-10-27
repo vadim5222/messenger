@@ -1,7 +1,12 @@
-from sqlmodel import SQLModel
+from pydantic import BaseModel, Field
 
-class PermissionBase(SQLModel):
-    title: str
+class PermissionCreate(BaseModel):
+    title: str = Field(
+        title='Разрешение',
+        description='Введите название разрешения',
+        min_length=0,
+        max_length=20
+    )
 
-class PermissionCreate(PermissionBase):
-    title: str
+class PermissionPublic(PermissionCreate):
+    id: int

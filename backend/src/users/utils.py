@@ -1,19 +1,30 @@
-from sqlmodel import select
-from sqlalchemy.orm import joinedload
-from database import SessionDep
-from users.models import Users, Role
-from typing import Annotated
-from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
-from .exceptions import credential_exception
-from dotenv import load_dotenv
-from tokens.schemas import TokenData
-from .models import Users
-from roles.service import get_role
-from permissions.service import get_permission
 import jwt
 from jwt.exceptions import InvalidTokenError
+from typing import Annotated
 import os
+from dotenv import load_dotenv
+
+
+from fastapi import Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer
+
+from sqlmodel import select
+
+
+from database import SessionDep
+from .exceptions import credential_exception
+from .models import User
+
+
+from sqlalchemy.orm import joinedload
+
+
+from users.models import User, Role
+from tokens.schemas import TokenData
+from roles.service import get_role
+from permissions.service import get_permission
+
+
 load_dotenv()
 
 
@@ -28,7 +39,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 ALGORITHM = os.getenv('ALGORITHM') 
 
 async def get_user(username: str, session: SessionDep):
-    query = select(Users).where(Users.username == username).options(joinedload(Users.role).selectinload(Role.permissions))
+    query = select(User).where(User.username == username).options(joinedload(User.role).selectinload(Role.permissions))
     result = await session.execute(query)
     return result.scalar_one_or_none()
 
@@ -47,7 +58,7 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], sessio
         raise credential_exception
     return user
 
-async def get_active_current_user(current_user: Annotated[Users, Depends(get_current_user)]):
+async def get_active_current_user(current_user: Annotated[User, Depends(get_current_user)]):
     if not current_user.active:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,

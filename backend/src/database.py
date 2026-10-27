@@ -1,13 +1,20 @@
 import os
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 from dotenv import load_dotenv
-from fastapi import Depends
-load_dotenv()
 from typing import Annotated
-from fastapi import APIRouter
-from users.models import Users
-from sqlmodel import SQLModel
 
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
+from users.models import Base
+
+
+from fastapi import Depends
+from fastapi import APIRouter
+
+
+from users.models import User
+
+
+
+load_dotenv()
 database_router = APIRouter()
 
 DATABASE_URL = os.getenv('DATABASE_URL')
@@ -24,6 +31,6 @@ SessionDep = Annotated[AsyncSession, Depends(get_session)]
 @database_router.post('/setup-database')
 async def setup_database():
     async with engine.begin() as conn:
-        await conn.run_sync(SQLModel.metadata.drop_all)
-        await conn.run_sync(SQLModel.metadata.create_all)
+        await conn.run_sync(Base.metadata.drop_all)
+        await conn.run_sync(Base.metadata.create_all)
     return {'message':'Успех'}

@@ -1,9 +1,13 @@
-from sqlmodel import SQLModel
+from pydantic import BaseModel, Field
 
-class RoleBase(SQLModel):
-    title: str
+class RoleCreate(BaseModel):
+    title: str | None = Field(
+        title='Название роли',
+        description='Введите название роли',
+        min_length=0,
+        max_length=20
+    )
 
-
-class RoleCreate(RoleBase):
-    pass
+class RolePublic(RoleCreate):
+    id: int
 

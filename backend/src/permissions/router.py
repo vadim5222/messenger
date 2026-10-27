@@ -1,9 +1,16 @@
-from fastapi import APIRouter, Depends
-from .schemas import PermissionCreate
-from database import SessionDep
-from .service import create_permission
 from typing import Annotated
+
+
+from fastapi import APIRouter, Depends
+
+from database import SessionDep
+
+from .schemas import PermissionCreate
+from .service import create_permission
+
+
 from users.utils import get_current_user_permissions
+
 
 permission_router = APIRouter()
 

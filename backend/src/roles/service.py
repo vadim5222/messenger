@@ -1,7 +1,13 @@
+from sqlmodel import select
+
+
 from database import SessionDep
+
+
 from users.models import Role
 from .schemas import RoleCreate
-from sqlmodel import select
+
+
 from fastapi import HTTPException, status
 
 

@@ -1,10 +1,17 @@
-from fastapi import APIRouter
-from .schemas import RoleCreate
-from database import SessionDep
-from .service import create_role
 from typing import Annotated
-from users.models import Role
+
+
+from fastapi import APIRouter
 from fastapi import Depends
+
+
+from database import SessionDep
+
+from .schemas import RoleCreate
+from .service import create_role
+
+
+from users.models import Role
 from users.utils import get_current_user_role
 
 role_router = APIRouter()

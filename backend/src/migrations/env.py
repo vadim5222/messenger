@@ -2,8 +2,10 @@ from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
-from users.models import Users, Role, Permission
-from database import SQLModel
+
+
+from users.models import User, Role, Permissions, Role_Permission
+from database import Base
 
 from alembic import context
 from database import DATABASE_URL
@@ -18,7 +20,7 @@ if config.config_file_name is not None:
 config.set_main_option('sqlalchemy.url', DATABASE_URL + '?async_fallback=True')
 
 
-target_metadata = SQLModel.metadata
+target_metadata = Base.metadata
 
 
 
