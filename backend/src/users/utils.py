@@ -19,7 +19,7 @@ from .models import User
 from sqlalchemy.orm import joinedload
 
 
-from users.models import User, Role
+from users.models import User, Role, Role_Permission
 from tokens.schemas import TokenData
 from roles.service import get_role
 from permissions.service import get_permission

@@ -29,6 +29,8 @@ from tokens.schemas import TokenRead, TokenData, RefreshToken
 
 from sqlmodel import select
 
+
+
 load_dotenv()
 
 
@@ -60,7 +62,6 @@ async def register(session: SessionDep, user: UserCreate):
         surname = user.surname,
         username = user.username,
         age = user.age,
-        # active=user.active,
         hashed_password = get_password_hash(user.password),
         role_id=role.id
     )
@@ -68,7 +69,6 @@ async def register(session: SessionDep, user: UserCreate):
     await session.commit()
     await session.refresh(new_user)
     return new_user
-
 
 @auth_router.post('/token')
 async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], session:SessionDep):

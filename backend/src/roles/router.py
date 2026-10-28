@@ -14,10 +14,15 @@ from .service import create_role
 from users.models import Role
 from users.utils import get_current_user_role
 
+from security import RoleChecker, UserRoles
+
 role_router = APIRouter()
 
-@role_router.post('/roles')
-async def create_new_role(title: RoleCreate, session: SessionDep):
+
+role_checker = RoleChecker(UserRoles.admin)
+
+@role_router.post('/roles', dependencies=[Depends(role_checker)])
+async def create_new_role(title: RoleCreate, session: SessionDep, ):
     return await create_role(role=title, session=session)
 
 @role_router.get('/roles/me')
