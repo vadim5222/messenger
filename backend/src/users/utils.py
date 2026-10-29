@@ -43,6 +43,11 @@ async def get_user(username: str, session: SessionDep):
     result = await session.execute(query)
     return result.scalar_one_or_none()
 
+async def get_user_by_id(user_id:int, session: SessionDep):
+    query = select(User).where(User.id == user_id)
+    result = await session.execute(query)
+    return result.scalar_one_or_none()
+
 
 async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], session: SessionDep):
     try:
