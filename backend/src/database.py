@@ -3,15 +3,28 @@ from dotenv import load_dotenv
 from typing import Annotated
 
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
-from users.models import Base
+
 
 
 from fastapi import Depends
 from fastapi import APIRouter
 
+from sqlalchemy.orm import DeclarativeBase
 
-from users.models import User
+class Base(DeclarativeBase):
+    pass
 
+from users.models import (
+    User,
+    Permissions,
+    Role,
+    Role_Permission
+)
+
+
+from messages.models import (
+    Message
+)
 
 
 load_dotenv()
@@ -26,6 +39,7 @@ async def get_session():
         yield session
 
 SessionDep = Annotated[AsyncSession, Depends(get_session)]
+
 
 
 @database_router.post('/setup-database')

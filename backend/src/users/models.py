@@ -1,16 +1,14 @@
 from typing import List, Optional
 
 
+from database import Base
+
 from sqlalchemy import ForeignKey, String, Column
 
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship, validates
 
 
 
-
-
-class Base(DeclarativeBase):
-    pass
 
 
 # ------------------Модель пользователя
@@ -34,6 +32,8 @@ class User(Base):
     role_id: Mapped[int] = mapped_column(ForeignKey('roles.id'))
 
     role: Mapped['Role'] = relationship(back_populates='users')
+
+    messages: Mapped[List["Message"]] = relationship(back_populates='user')
     
 
     def __repr__(self):

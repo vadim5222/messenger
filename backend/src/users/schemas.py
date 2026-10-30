@@ -8,6 +8,8 @@ from pydantic import BaseModel, Field, AfterValidator
 def age_validator(value: int) -> int:
     if value < 12 or value > 100:
         raise ValueError(f'Ваш возраст - {value}. Возраст должен быть от 12 до 100 лет')
+    return value
+
 
 class UserBase(BaseModel):
     name: str = Field(

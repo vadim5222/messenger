@@ -5,6 +5,9 @@ from sqlalchemy import pool
 
 
 from users.models import User, Role, Permissions, Role_Permission
+
+from messages.models import Message
+
 from database import Base
 
 from alembic import context

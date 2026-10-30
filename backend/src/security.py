@@ -33,7 +33,7 @@ class RoleChecker:
 
 
 
-# ===TODO: исправить логику проверки на права доступа
+
 class PermissionChecker:
     def __init__(self, allowed_permissions: List[UserPermissions]):
         self.allowed_permissions = allowed_permissions
