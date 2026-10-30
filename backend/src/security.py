@@ -38,11 +38,14 @@ class PermissionChecker:
     def __init__(self, allowed_permissions: List[UserPermissions]):
         self.allowed_permissions = allowed_permissions
 
-    def __call__(self, permissions: Annotated[Permissions, Depends(get_current_user_permissions)]):
-        if self.allowed_permissions in permissions:
-            return permissions
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
-
+    async def __call__(self, permissions: Annotated[Permissions, Depends(get_current_user_permissions)]):
+        for permission in permissions:
+            if permission.title in self.allowed_permissions:
+                return
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail='У вас недостаточно прав'
+        )
 
 
 
