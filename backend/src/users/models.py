@@ -35,12 +35,6 @@ class User(Base):
 
     role: Mapped['Role'] = relationship(back_populates='users')
     
-    @validates('age')
-    def validate_age(self, key, age):
-        if age <=12 and age >= 100:
-            raise ValueError('Возраст должен быть в диапазоне от 0 до 100')
-        return age
-
 
     def __repr__(self):
         return f"User(id={self.id}!r), name={self.username}!r, fullname={self.name}!r"

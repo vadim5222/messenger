@@ -1,5 +1,13 @@
-from pydantic import BaseModel, Field
+from typing import Annotated
 
+from pydantic import BaseModel, Field, AfterValidator
+
+
+
+
+def age_validator(value: int) -> int:
+    if value < 12 or value > 100:
+        raise ValueError(f'Ваш возраст - {value}. Возраст должен быть от 12 до 100 лет')
 
 class UserBase(BaseModel):
     name: str = Field(
@@ -14,7 +22,10 @@ class UserBase(BaseModel):
         title="Никнейм", description="Введите ваш никнейм", min_length=0, max_length=50
     )
 
-    age: int = Field(title="Возраст", description="Введите ваш возраст", gt=12, lt=100)
+    age: Annotated[int, AfterValidator(age_validator)] = Field(
+        title='Возраст',
+        description='Введите ваш возраст'
+    )
 
 
 class UserCreate(UserBase):
