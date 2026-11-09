@@ -6,11 +6,16 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from auth.router import auth_router
+
 from users.router import user_router
+
 from roles.router import role_router
+
 from permissions.router import permission_router
+
 from messages.router import message_route
 
+from chats.router import chat_router
 
 app = FastAPI()
 
@@ -20,6 +25,7 @@ app.include_router(user_router)
 app.include_router(role_router)
 app.include_router(permission_router)
 app.include_router(message_route)
+app.include_router(chat_router)
 
 
 origins = [

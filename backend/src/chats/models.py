@@ -17,6 +17,8 @@ class Chat(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
 
+    title: Mapped[str]
+
     users: Mapped[List["User"]] = relationship(
         secondary='users_chats', back_populates='chats'
     )
