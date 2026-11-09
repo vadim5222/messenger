@@ -5,7 +5,7 @@ from database import Base
 
 from sqlalchemy import ForeignKey, String, Column
 
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship, validates
+from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
 
 
 
@@ -33,7 +33,9 @@ class User(Base):
 
     role: Mapped['Role'] = relationship(back_populates='users')
 
-    messages: Mapped[List["Message"]] = relationship(back_populates='user')
+    sent_messages: Mapped[List["Message"]] = relationship(foreign_keys='Message.sender_id',back_populates='sender')
+
+    received_messages: Mapped[List["Message"]] = relationship(foreign_keys='Message.recipient_id',back_populates='recipient')
     
 
     def __repr__(self):

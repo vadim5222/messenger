@@ -11,21 +11,12 @@ from fastapi import APIRouter
 
 from sqlalchemy.orm import DeclarativeBase
 
+
 class Base(DeclarativeBase):
     pass
 
-from users.models import (
-    User,
-    Permissions,
-    Role,
-    Role_Permission
-)
-
-
-from messages.models import (
-    Message
-)
-
+from users.models import *
+from messages.models import *
 
 load_dotenv()
 database_router = APIRouter()

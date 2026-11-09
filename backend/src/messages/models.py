@@ -1,5 +1,5 @@
 
-from datetime import datetime
+from datetime import datetime, timezone
 
 from sqlalchemy import ForeignKey, String, DateTime
 
@@ -17,11 +17,16 @@ class Message(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
 
-    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
+    sender_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
 
-    user: Mapped["User"] = relationship(back_populates='messages')
+    recipient_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
+
+
+    sender = relationship("User", foreign_keys=[sender_id], back_populates='sent_messages')
+
+    recipient = relationship("User", foreign_keys=[recipient_id], back_populates='received_messages')
 
     content: Mapped[str] = mapped_column(String(500))
 
-    created_at: Mapped[datetime] = mapped_column(DateTime)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=datetime.now(timezone.utc))
 
