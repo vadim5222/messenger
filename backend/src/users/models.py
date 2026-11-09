@@ -3,11 +3,9 @@ from typing import List, Optional
 
 from database import Base
 
-from sqlalchemy import ForeignKey, String, Column
+from sqlalchemy import ForeignKey, String, Column, Table
 
 from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
-
-
 
 
 
@@ -36,7 +34,11 @@ class User(Base):
     sent_messages: Mapped[List["Message"]] = relationship(foreign_keys='Message.sender_id',back_populates='sender')
 
     received_messages: Mapped[List["Message"]] = relationship(foreign_keys='Message.recipient_id',back_populates='recipient')
-    
+
+    chats: Mapped[List["Chat"]] = relationship(
+        secondary='users_chats', back_populates='users'
+    )
+        
 
     def __repr__(self):
         return f"User(id={self.id}!r), name={self.username}!r, fullname={self.name}!r"
@@ -64,11 +66,22 @@ class Permissions(Base):
 
     roles: Mapped[List[Role]] = relationship(secondary='role_permissions', back_populates='permissions')
 
+
+# ========================================модель для связки роли и разрешений
 class Role_Permission(Base):
     __tablename__ = 'role_permissions'
     id: Mapped[int] = mapped_column(primary_key=True)
     role_id: Mapped[int] = mapped_column(ForeignKey('roles.id'))
     permission_id: Mapped[int] = mapped_column(ForeignKey('permissions.id'))
+
+
+# =================================модель для связки пользователей и чатов
+
+class Users_chats(Base):
+    __tablename__ = 'users_chats'
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
+    chat_id: Mapped[int] = mapped_column(ForeignKey('chats.id'))
 
 
 

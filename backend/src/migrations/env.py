@@ -4,9 +4,11 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
 
-from users.models import User, Role, Permissions, Role_Permission
+from users.models import User, Role, Permissions, Role_Permission, Users_chats
 
 from messages.models import Message
+
+from chats.models import Chat
 
 from database import Base
 

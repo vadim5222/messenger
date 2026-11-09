@@ -17,6 +17,7 @@ class Base(DeclarativeBase):
 
 from users.models import *
 from messages.models import *
+from chats.models import Chat
 
 load_dotenv()
 database_router = APIRouter()
