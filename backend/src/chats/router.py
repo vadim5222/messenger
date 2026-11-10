@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, WebSocket
 
 from database import SessionDep
 
@@ -38,3 +38,12 @@ async def get_users_in_chat(id: int, session: SessionDep):
     result = await session.execute(query)
     users = result.scalars().all()
     return users
+
+
+
+
+@chat_router.websocket('/ws')
+async def websocket(websocket: WebSocket):
+    await websocket.accept()
+    while True:
+        data = await websocket.receive_text()
